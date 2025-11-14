@@ -26,7 +26,7 @@ public class UserService {
     public SignUpResponse signup(SignUpRequest request) {
 
         // 이미 존재하는 아이디인지 확인
-        if (userRepository.findById(request.getId()).isPresent()) {
+        if (userRepository.findById(request.getUserId()).isPresent()) {
             throw new IllegalArgumentException("이미 가입된 아이디입니다.");
         }
 
@@ -41,7 +41,7 @@ public class UserService {
 
         // 응답 DTO 반환
         return SignUpResponse.builder()
-                .id(user.getId())
+                .userId(user.getUserId())
                 .tel(user.getTel())
                 .name(user.getName())
                 .message("회원가입 성공")
@@ -50,23 +50,23 @@ public class UserService {
 
     public LoginResponse login(LoginRequest req) {
 
-        UserEntity user = userRepository.findById(req.getId())
+        UserEntity user = userRepository.findById(req.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 ID"));
 
         if (!passwordEncoder.matches(req.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("비밀번호 불일치");
         }
 
-        String accessToken = jwtUtil.generateAccessToken(user.getId(), user.getRole());
-        String refreshToken = jwtUtil.generateRefreshToken(user.getId());
+        String accessToken = jwtUtil.generateAccessToken(user.getUserId(), user.getRole());
+        String refreshToken = jwtUtil.generateRefreshToken(user.getUserId());
 
         // DB 저장
-        refreshTokenRepository.save(RefreshTokenEntity.tokenUpdate(user.getId(),refreshToken));
+        refreshTokenRepository.save(RefreshTokenEntity.tokenUpdate(user.getUserId(),refreshToken));
 
         return LoginResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .id(user.getId())
+                .userId(user.getUserId())
                 .role(user.getRole())
                 .message("로그인 성공")
                 .build();

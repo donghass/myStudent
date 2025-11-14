@@ -7,7 +7,7 @@ public class UserMapper {
 
     public static UserEntity toEntity(SignUpRequest request, String encodedPassword) {
         return UserEntity.builder()
-                .id(request.getId())
+                .userId(request.getUserId())
                 .password(encodedPassword)
                 .name(request.getName())
                 .tel(request.getTel())

@@ -23,10 +23,10 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<UserEntity> findById(String id) {
+    public Optional<UserEntity> findById(String userId) {
         UserEntity user = queryFactory
                 .selectFrom(userEntity)
-                .where(userEntity.id.eq(id))
+                .where(userEntity.userId.eq(userId))
                 .fetchOne();
 
         return Optional.ofNullable(user);

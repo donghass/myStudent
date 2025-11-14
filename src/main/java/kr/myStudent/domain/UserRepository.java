@@ -6,7 +6,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository {
-    Optional<UserEntity> findById(String id);
+    Optional<UserEntity> findById(String userId);
 
     UserEntity save(UserEntity user);
 }

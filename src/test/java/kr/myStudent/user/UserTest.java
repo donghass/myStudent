@@ -35,7 +35,7 @@ public class UserTest {
         // 1. 회원가입 요청
 
         SignUpRequest signUpRequest = SignUpRequest.builder()
-                .id("test1@example.com")
+                .userId("test2@example.com")
                 .password("1234")
                 .name("홍길동")
                 .tel("01012345678")
@@ -45,14 +45,14 @@ public class UserTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signUpRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.id").value("test1@example.com"));
+                .andExpect(jsonPath("$.data.userId").value("test2@example.com"));
 
 
 
         // 2. 로그인 요청 → JWT 발급
 
         LoginRequest loginRequest = LoginRequest.builder()
-                .id("test1@example.com")
+                .userId("test2@example.com")
                 .password("1234")
                 .build();
 
@@ -71,10 +71,10 @@ public class UserTest {
                 .path("accessToken")
                 .asText();
 
-        log.info("SignUpRequest ID: {}", signUpRequest.getId());
+        log.info("SignUpRequest ID: {}", signUpRequest.getUserId());
         log.info("SignUpRequest PW: {}", signUpRequest.getPassword());
 
-        log.info("LoginRequest ID: {}", loginRequest.getId());
+        log.info("LoginRequest ID: {}", loginRequest.getUserId());
         log.info("LoginRequest PW: {}", loginRequest.getPassword());
 
         log.info("Access Token: {}", accessToken);
