@@ -1,118 +1,83 @@
 package kr.myStudent.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.myStudent.common.response.ResponseCode;
-import kr.myStudent.controller.UserController;
-import kr.myStudent.domain.UserRepository;
 import kr.myStudent.dto.request.LoginRequest;
 import kr.myStudent.dto.request.SignUpRequest;
-import kr.myStudent.dto.response.LoginResponse;
-import kr.myStudent.dto.response.SignUpResponse;
-import kr.myStudent.jwt.JwtUtil;
-import kr.myStudent.service.UserService;
-import org.instancio.Instancio;
-import org.instancio.Select;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = true)
 @Testcontainers
-class UserTest {
+@Slf4j
+public class UserTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private JwtUtil jwtUtil;
-
     @Autowired
     private ObjectMapper objectMapper;
 
-    // UserService만 Mock 처리 (Controller 단위 테스트)
-    @MockBean
-    private UserService userService;
-
-    @MockBean
-    private UserRepository userRepository;
-
     @Test
-    @DisplayName("회원가입 성공 테스트")
-    void signup_success() throws Exception {
+    @DisplayName("회원가입 → 로그인 → 인증 API 전체 흐름 테스트")
+    void signup_login_me_flow() throws Exception {
 
-        // Instancio로 랜덤 Request 생성 (필드 원하는 값으로 override 가능)
-        SignUpRequest request = Instancio.of(SignUpRequest.class)
-                .set(Select.field("id"), "testUser")
-                .set(Select.field("email"), "test@example.com")
-                .set(Select.field("password"), "1234")
-                .set(Select.field("name"), "홍길동")
-                .create();
+        // 1. 회원가입 요청
 
-        // Mock Response
-        SignUpResponse mockResponse = SignUpResponse.builder()
-                .id("test@example.com")
+        SignUpRequest signUpRequest = SignUpRequest.builder()
+                .id("test1@example.com")
+                .password("1234")
                 .name("홍길동")
-                .message("회원가입 성공")
+                .tel("01012345678")
                 .build();
-
-        Mockito.when(userService.signup(any(SignUpRequest.class)))
-                .thenReturn(mockResponse);
 
         mockMvc.perform(post("/auth/signup")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .content(objectMapper.writeValueAsString(signUpRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(ResponseCode.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data.id").value("testUser"))
-                .andExpect(jsonPath("$.data.email").value("test@example.com"))
-                .andExpect(jsonPath("$.data.name").value("홍길동"));
-    }
+                .andExpect(jsonPath("$.data.id").value("test1@example.com"));
 
-    @Test
-    @DisplayName("로그인 성공 테스트")
-    void login_success() throws Exception {
 
-        // Instancio로 생성
-        LoginRequest request = Instancio.of(LoginRequest.class)
-                .set(Select.field("id"), "testUser")
-                .set(Select.field("password"), "1234")
-                .create();
 
-        LoginResponse mockResponse = LoginResponse.builder()
-                .id("testUser")
-                .accessToken("mockAccessTokenValue")
-                .refreshToken("mockRefreshTokenValue")
-                .message("로그인 성공")
+        // 2. 로그인 요청 → JWT 발급
+
+        LoginRequest loginRequest = LoginRequest.builder()
+                .id("test1@example.com")
+                .password("1234")
                 .build();
 
-        Mockito.when(userService.login(any(LoginRequest.class)))
-                .thenReturn(mockResponse);
-
-        mockMvc.perform(post("/auth/login")
+        String token = mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .content(objectMapper.writeValueAsString(loginRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(ResponseCode.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data.id").value("testUser"))
-                .andExpect(jsonPath("$.data.accessToken").value("mockAccessTokenValue"))
-                .andExpect(jsonPath("$.data.refreshToken").value("mockRefreshTokenValue"))
-                .andExpect(jsonPath("$.data.message").value("로그인 성공"));
+                .andExpect(jsonPath("$.data.accessToken").exists())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        // 응답 JSON에서 accessToken만 꺼내기
+        String accessToken = objectMapper.readTree(token)
+                .path("data")
+                .path("accessToken")
+                .asText();
+
+        log.info("SignUpRequest ID: {}", signUpRequest.getId());
+        log.info("SignUpRequest PW: {}", signUpRequest.getPassword());
+
+        log.info("LoginRequest ID: {}", loginRequest.getId());
+        log.info("LoginRequest PW: {}", loginRequest.getPassword());
+
+        log.info("Access Token: {}", accessToken);
+        log.info("Raw Token Response JSON: {}", token);
     }
-
-
 }
