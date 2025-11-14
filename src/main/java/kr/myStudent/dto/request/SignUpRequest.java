@@ -1,0 +1,17 @@
+package kr.myStudent.dto.request;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Data
+public class SignUpRequest {
+    private String id;
+    private String password;
+    private String name;
+    private String tel;
+}

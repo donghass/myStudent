@@ -38,10 +38,25 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j:8.3.0'
 
     // 테스트
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:mysql'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.instancio:instancio-junit:2.15.0'
+    testImplementation 'org.instancio:instancio-core:2.15.0'
+    implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+
+    // jwt
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
 }
 
 test {
     useJUnitPlatform()
+    jvmArgs '-Dfile.encoding=UTF-8'
 }
