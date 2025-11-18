@@ -1,7 +1,8 @@
-package kr.myStudent.domain;
+package kr.myStudent.schedule.domain;
 
 import jakarta.persistence.*;
-import kr.myStudent.domain.enums.Subject;
+import kr.myStudent.enums.Subject;
+import kr.myStudent.schedule.dto.request.ScheduleUpdateRequest;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -38,4 +39,18 @@ public class ScheduleEntity {
 
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;           // 수업내용
+
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Builder.Default
+    private LocalDateTime updatedAt = LocalDateTime.now();
+
+    public void updateSchedule(ScheduleUpdateRequest req) {
+        this.subject = req.getSubject();
+        this.classDate = req.getClassDate();
+        this.classLocation = req.getClassLocation();
+        this.content = req.getContent();
+    }
+
 }

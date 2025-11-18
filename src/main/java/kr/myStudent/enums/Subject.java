@@ -1,4 +1,4 @@
-package kr.myStudent.domain.enums;
+package kr.myStudent.enums;
 
 public enum Subject {
     KOREAN,

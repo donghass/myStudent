@@ -1,15 +1,20 @@
-package kr.myStudent.domain;
+package kr.myStudent.score.domain;
+
 
 import jakarta.persistence.*;
-import kr.myStudent.domain.enums.Subject;
-import lombok.*;
+import kr.myStudent.enums.Subject;
+import kr.myStudent.score.dto.request.ScoreUpdateRequest;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "ms_score")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -39,5 +44,17 @@ public class ScoreEntity {
     @Column(name = "test_date")
     private LocalDate testDate; // 시험날짜
 
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Builder.Default
+    private LocalDateTime updatedAt = LocalDateTime.now();
+
+    public void updateScore(ScoreUpdateRequest req) {
+        this.subject = req.getSubject();
+        this.score = req.getScore();
+        this.testName = req.getTestName();
+        this.testDate = req.getTestDate();
+        this.updatedAt = LocalDateTime.now();
+    }
 }
