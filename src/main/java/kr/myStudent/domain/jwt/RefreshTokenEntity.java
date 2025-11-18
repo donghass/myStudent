@@ -1,4 +1,4 @@
-package kr.myStudent.domain;
+package kr.myStudent.domain.jwt;
 
 import jakarta.persistence.*;
 import lombok.*;

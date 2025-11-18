@@ -1,6 +1,6 @@
-package kr.myStudent.mapper;
+package kr.myStudent.mapper.user;
 
-import kr.myStudent.domain.UserEntity;
+import kr.myStudent.domain.user.UserEntity;
 import kr.myStudent.dto.request.SignUpRequest;
 
 public class UserMapper {
