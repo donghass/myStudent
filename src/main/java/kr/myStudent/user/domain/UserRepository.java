@@ -1,0 +1,12 @@
+package kr.myStudent.user.domain;
+
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface UserRepository {
+    Optional<UserEntity> findById(String userId);
+
+    UserEntity save(UserEntity user);
+}

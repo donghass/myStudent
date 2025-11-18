@@ -38,4 +38,6 @@ public class ScoreEntity {
 
     @Column(name = "test_date")
     private LocalDate testDate; // 시험날짜
+
+
 }

@@ -1,8 +1,8 @@
 package kr.myStudent.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.myStudent.dto.request.LoginRequest;
-import kr.myStudent.dto.request.SignUpRequest;
+import kr.myStudent.user.dto.request.LoginRequest;
+import kr.myStudent.user.dto.request.SignUpRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
