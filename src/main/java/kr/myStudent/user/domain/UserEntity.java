@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 public class UserEntity {
 
     @Id
-    @Email
     @NotBlank
     @Column(name = "user_id", nullable = false)
     private String userId;
@@ -28,13 +27,16 @@ public class UserEntity {
 
     private String name;
 
+    @Email
+    private String email;
+
     private String tel;
 
     @Builder.Default
-    private String status = "1";   // 사용중 1, 미사용 2
+    private String status = "1"; // 사용중 1, 미사용 2
 
     @Builder.Default
-    private String role = "USER";   // 권한: USER 또는 ADMIN
+    private String role = "USER"; // 권한: USER 또는 ADMIN
 
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();

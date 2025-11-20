@@ -1,5 +1,7 @@
 package kr.myStudent.user.service;
 
+import kr.myStudent.common.exception.BusinessException;
+import kr.myStudent.common.response.ResponseCode;
 import kr.myStudent.jwt.domain.RefreshTokenRepository;
 import kr.myStudent.user.domain.UserEntity;
 import kr.myStudent.user.domain.UserRepository;
@@ -29,7 +31,7 @@ public class UserService {
 
         // 이미 존재하는 아이디인지 확인
         if (userRepository.findById(request.getUserId()).isPresent()) {
-            throw new IllegalArgumentException("이미 가입된 아이디입니다.");
+            throw new BusinessException(ResponseCode.DUPLICATE_USER_ID);
         }
 
         // 비밀번호 암호화
@@ -60,7 +62,6 @@ public class UserService {
         }
 
         TokenResponse tokens = jwtService.createTokens(user);
-
 
         return LoginResponse.builder()
                 .accessToken(tokens.getAccessToken())
