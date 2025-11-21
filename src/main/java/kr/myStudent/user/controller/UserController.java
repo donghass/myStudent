@@ -55,4 +55,15 @@ public class UserController {
         userService.deactivate(userId);
         return ResponseEntity.ok(CommonResponse.success(ResponseCode.SUCCESS, "유저 비활성화 완료"));
     }
+    @PostMapping("/logout")
+    public ResponseEntity<CommonResponse<String>> logout(
+            @RequestHeader("Authorization") String authHeader,
+            @RequestHeader("UserId") String userId
+    ) {
+        String accessToken = authHeader.substring(7);
+
+        userService.logout(accessToken, userId);
+
+        return ResponseEntity.ok(CommonResponse.success(ResponseCode.SUCCESS, "로그아웃 완료"));
+    }
 }

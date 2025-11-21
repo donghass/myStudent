@@ -51,6 +51,11 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
     }
+    public long getExpiration(String token) {
+        Date exp = parseClaims(token).getExpiration();
+        return exp.getTime() - System.currentTimeMillis();
+    }
+
 
     // 토큰 유효성 검사
     public boolean validateToken(String token) {

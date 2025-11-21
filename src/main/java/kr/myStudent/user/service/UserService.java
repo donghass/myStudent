@@ -1,6 +1,5 @@
 package kr.myStudent.user.service;
 
-import kr.myStudent.jwt.domain.RefreshTokenRepository;
 import kr.myStudent.user.domain.UserEntity;
 import kr.myStudent.user.domain.UserRepository;
 import kr.myStudent.user.dto.request.LoginRequest;
@@ -9,7 +8,6 @@ import kr.myStudent.user.dto.request.UserUpdateRequest;
 import kr.myStudent.user.dto.response.LoginResponse;
 import kr.myStudent.user.dto.response.SignUpResponse;
 import kr.myStudent.jwt.dto.response.TokenResponse;
-import kr.myStudent.jwt.JwtUtil;
 import kr.myStudent.user.dto.response.UserResponse;
 import kr.myStudent.user.mapper.UserMapper;
 import kr.myStudent.jwt.service.JwtService;
@@ -22,9 +20,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
     private final JwtService jwtService;
 
     public SignUpResponse signup(SignUpRequest request) {
@@ -71,6 +67,11 @@ public class UserService {
                 .role(user.getRole())
                 .message("로그인 성공")
                 .build();
+    }
+
+    /** 로그아웃 */
+    public void logout(String accessToken, String userId) {
+        jwtService.invalidateTokens(userId, accessToken);
     }
 
     /** 유저 정보 조회 */
