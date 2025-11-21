@@ -67,6 +67,7 @@ public class UserService {
                 .accessToken(tokens.getAccessToken())
                 .refreshToken(tokens.getRefreshToken())
                 .userId(user.getUserId())
+                .name(user.getName())
                 .role(user.getRole())
                 .message("로그인 성공")
                 .build();
