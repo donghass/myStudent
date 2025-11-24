@@ -2,15 +2,15 @@ package kr.myStudent.user.service;
 
 import kr.myStudent.common.exception.BusinessException;
 import kr.myStudent.common.response.ResponseCode;
-import kr.myStudent.jwt.domain.RefreshTokenRepository;
 import kr.myStudent.user.domain.UserEntity;
 import kr.myStudent.user.domain.UserRepository;
 import kr.myStudent.user.dto.request.LoginRequest;
 import kr.myStudent.user.dto.request.SignUpRequest;
+import kr.myStudent.user.dto.request.UserUpdateRequest;
 import kr.myStudent.user.dto.response.LoginResponse;
 import kr.myStudent.user.dto.response.SignUpResponse;
 import kr.myStudent.jwt.dto.response.TokenResponse;
-import kr.myStudent.jwt.JwtUtil;
+import kr.myStudent.user.dto.response.UserResponse;
 import kr.myStudent.user.mapper.UserMapper;
 import kr.myStudent.jwt.service.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +22,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
     private final JwtService jwtService;
 
     public SignUpResponse signup(SignUpRequest request) {
@@ -71,5 +69,49 @@ public class UserService {
                 .role(user.getRole())
                 .message("로그인 성공")
                 .build();
+    }
+
+    /** 로그아웃 */
+    public void logout(String accessToken, String userId) {
+        jwtService.invalidateTokens(userId, accessToken);
+    }
+
+    /** 유저 정보 조회 */
+    public UserResponse getOne(String userId) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+
+        return UserResponse.fromEntity(user);
+    }
+
+    /** 유저 정보 수정 */
+    public UserResponse update(String userId, UserUpdateRequest req) {
+
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+
+        String encodedPassword = null;
+        if (req.getPassword() != null) {
+            encodedPassword = passwordEncoder.encode(req.getPassword());
+        }
+
+        user.updateInfo(
+                req.getName(),
+                req.getTel(),
+                encodedPassword);
+
+        userRepository.save(user);
+
+        return UserResponse.fromEntity(user);
+    }
+
+    /** 유저 삭제(비활성화) */
+    public void deactivate(String userId) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+
+        user.deactivate();
+
+        userRepository.save(user);
     }
 }

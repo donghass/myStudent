@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.myStudent.redis.repository.TokenRedisRepository;
 import kr.myStudent.user.domain.UserEntity;
 import kr.myStudent.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,18 +22,28 @@ import java.util.List;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+    private final TokenRedisRepository redisRepo;
     private final UserRepository userRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
             throws ServletException, IOException {
 
-        String header = request.getHeader("Authorization");
+        String header = req.getHeader("Authorization");
 
         if (header != null && header.startsWith("Bearer ")) {
+
             String token = header.substring(7);
 
+            // 1) 블랙리스트 체크
+            if (redisRepo.isBlacklisted(token)) {
+                chain.doFilter(req, res);
+                return;
+            }
+
+            // 2) AccessToken 검증
             if (jwtUtil.validateToken(token)) {
+
                 String userId = jwtUtil.extractId(token);
                 String role = jwtUtil.extractRole(token);
 
@@ -45,11 +56,12 @@ public class JwtFilter extends OncePerRequestFilter {
                                     null,
                                     List.of(new SimpleGrantedAuthority(role))
                             );
+
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             }
         }
 
-        chain.doFilter(request, response);
+        chain.doFilter(req, res);
     }
 }

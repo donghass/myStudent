@@ -43,4 +43,18 @@ public class UserEntity {
 
     @Builder.Default
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+
+    public void updateInfo(String name, String tel, String password) {
+        if (name != null) this.name = name;
+        if (tel != null) this.tel = tel;
+        if (password != null) this.password = password;
+
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void deactivate() {
+        this.status = "2"; // 미사용
+        this.updatedAt = LocalDateTime.now();
+    }
 }
