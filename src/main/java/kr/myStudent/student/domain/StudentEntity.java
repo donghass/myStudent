@@ -13,8 +13,13 @@ import java.time.LocalDateTime;
 @Builder
 public class StudentEntity {
 
-    @EmbeddedId
-    private StudentId id;   // 복합키 (student_id + user_id)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "student_id")
+    private Long studentId;   // 학생 PK (자동 증가)
+
+    @Column(name = "user_id", nullable = false)
+    private String userId;      // 선생 아이디 (FK 역할)
 
     @Column(name = "name", length = 20, nullable = false)
     private String name;        // 학생이름

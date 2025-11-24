@@ -9,7 +9,7 @@ import lombok.Data;
 @Builder
 public class StudentResponse {
 
-    private String studentId;
+    private Long studentId;
     private String userId;
     private String name;
     private String tel;
@@ -19,8 +19,8 @@ public class StudentResponse {
 
     public static StudentResponse fromEntity(StudentEntity e) {
         return StudentResponse.builder()
-                .studentId(e.getId().getStudentId())
-                .userId(e.getId().getUserId())
+                .studentId(e.getStudentId())
+                .userId(e.getUserId())
                 .name(e.getName())
                 .tel(e.getTel())
                 .age(e.getAge())
