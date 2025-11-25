@@ -58,9 +58,20 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     developmentOnly "org.springframework.boot:spring-boot-devtools"
+
+    // 메일
+    // implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 }
 
 test {
     useJUnitPlatform()
     jvmArgs '-Dfile.encoding=UTF-8'
+}
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', "$buildDir/generated/sources/annotationProcessor/java/main"]
+        }
+    }
 }
