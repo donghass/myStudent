@@ -23,15 +23,15 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<CommonResponse<SignUpResponse>> signup(@RequestBody SignUpRequest request) {
         SignUpResponse signUpResponse = userService.signup(request);
-        CommonResponse<SignUpResponse> response = CommonResponse.success(ResponseCode.SUCCESS, signUpResponse);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(CommonResponse.success(ResponseCode.SUCCESS, signUpResponse));
     }
+
     @PostMapping("/login")
     public ResponseEntity<CommonResponse<LoginResponse>> login(@RequestBody LoginRequest request) {
         LoginResponse loginResponse = userService.login(request);
-        CommonResponse<LoginResponse> response = CommonResponse.success(ResponseCode.SUCCESS, loginResponse);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(CommonResponse.success(ResponseCode.SUCCESS, loginResponse));
     }
+
     /** 단건 조회 */
     @GetMapping("/{userId}")
     public ResponseEntity<CommonResponse<UserResponse>> getOne(@PathVariable String userId) {

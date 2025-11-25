@@ -2,7 +2,6 @@ package kr.myStudent.student.controller;
 
 import kr.myStudent.common.response.CommonResponse;
 import kr.myStudent.common.response.ResponseCode;
-import kr.myStudent.student.domain.StudentId;
 import kr.myStudent.student.dto.request.StudentCreateRequest;
 import kr.myStudent.student.dto.request.StudentUpdateRequest;
 import kr.myStudent.student.dto.response.StudentResponse;
@@ -34,12 +33,11 @@ public class StudentController {
     /** 단건 조회 */
     @GetMapping("/{studentId}/{userId}")
     public ResponseEntity<CommonResponse<StudentResponse>> getOne(
-            @PathVariable String studentId,
+            @PathVariable Long studentId,
             @PathVariable String userId
     ) {
-        StudentId id = new StudentId(studentId, userId);
 
-        StudentResponse result = studentService.getOne(id);
+        StudentResponse result = studentService.getOne(studentId, userId);
 
         return ResponseEntity.ok(
                 CommonResponse.success(ResponseCode.SUCCESS, result)
@@ -61,13 +59,12 @@ public class StudentController {
     /** 수정 */
     @PutMapping("/{studentId}/{userId}")
     public ResponseEntity<CommonResponse<StudentResponse>> update(
-            @PathVariable String studentId,
+            @PathVariable Long studentId,
             @PathVariable String userId,
             @RequestBody StudentUpdateRequest req
     ) {
-        StudentId id = new StudentId(studentId, userId);
 
-        StudentResponse result = studentService.update(id, req);
+        StudentResponse result = studentService.update(studentId, userId, req);
 
         return ResponseEntity.ok(
                 CommonResponse.success(ResponseCode.SUCCESS, result)
@@ -77,12 +74,11 @@ public class StudentController {
     /** 삭제 */
     @DeleteMapping("/{studentId}/{userId}")
     public ResponseEntity<CommonResponse<String>> delete(
-            @PathVariable String studentId,
+            @PathVariable Long studentId,
             @PathVariable String userId
     ) {
-        StudentId id = new StudentId(studentId, userId);
 
-        studentService.delete(id);
+        studentService.delete(studentId, userId);
 
         return ResponseEntity.ok(
                 CommonResponse.success(ResponseCode.SUCCESS, "삭제 완료")

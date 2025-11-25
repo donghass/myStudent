@@ -1,7 +1,6 @@
 package kr.myStudent.student.service;
 
 import kr.myStudent.student.domain.StudentEntity;
-import kr.myStudent.student.domain.StudentId;
 import kr.myStudent.student.dto.request.StudentCreateRequest;
 import kr.myStudent.student.dto.request.StudentUpdateRequest;
 import kr.myStudent.student.dto.response.StudentResponse;
@@ -21,13 +20,8 @@ public class StudentService {
     /** 등록 */
     public StudentResponse create(StudentCreateRequest req) {
 
-        StudentId id = StudentId.builder()
-                .studentId(req.getStudentId())
+        StudentEntity student = StudentEntity.builder()
                 .userId(req.getUserId())
-                .build();
-
-        StudentEntity entity = StudentEntity.builder()
-                .id(id)
                 .name(req.getName())
                 .tel(req.getTel())
                 .age(req.getAge())
@@ -35,18 +29,18 @@ public class StudentService {
                 .parentTel(req.getParentTel())
                 .build();
 
-        studentRepository.save(entity);
+        studentRepository.save(student);
 
-        return StudentResponse.fromEntity(entity);
+        return StudentResponse.fromEntity(student);
     }
 
-    /** 단건 조회 */
-    public StudentResponse getOne(StudentId id) {
+    /** 학생 단건 조회 */
+    public StudentResponse getOne(Long studentId, String userId) {
 
-        StudentEntity entity = studentRepository.findById(id)
+        StudentEntity student = studentRepository.findByStudent(studentId, userId)
                 .orElseThrow(() -> new IllegalArgumentException("학생을 찾을 수 없습니다."));
 
-        return StudentResponse.fromEntity(entity);
+        return StudentResponse.fromEntity(student);
     }
 
     /** 선생별 학생 전체 조회 */
@@ -60,9 +54,9 @@ public class StudentService {
     }
 
     /** 수정 */
-    public StudentResponse update(StudentId id, StudentUpdateRequest req) {
+    public StudentResponse update(Long studentId, String userId, StudentUpdateRequest req) {
 
-        StudentEntity student = studentRepository.findById(id)
+        StudentEntity student = studentRepository.findByStudent(studentId, userId)
                 .orElseThrow(() -> new IllegalArgumentException("학생을 찾을 수 없습니다."));
 
         student.update(req);
@@ -73,7 +67,7 @@ public class StudentService {
     }
 
     /** 삭제 */
-    public void delete(StudentId id) {
-        studentRepository.deleteById(id);
+    public void delete(Long studentId, String userId) {
+        studentRepository.deleteByStudent(studentId, userId);
     }
 }

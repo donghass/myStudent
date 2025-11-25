@@ -11,6 +11,7 @@ import kr.myStudent.user.dto.response.LoginResponse;
 import kr.myStudent.user.dto.response.SignUpResponse;
 import kr.myStudent.jwt.dto.response.TokenResponse;
 import kr.myStudent.user.dto.response.UserResponse;
+import kr.myStudent.user.execption.UserErrorCode;
 import kr.myStudent.user.mapper.UserMapper;
 import kr.myStudent.jwt.service.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class UserService {
 
         // 이미 존재하는 아이디인지 확인
         if (userRepository.findById(request.getUserId()).isPresent()) {
-            throw new BusinessException(ResponseCode.DUPLICATE_USER_ID);
+            throw new BusinessException(UserErrorCode.INVALID_USER_ID);
         }
 
         // 비밀번호 암호화
@@ -53,10 +54,10 @@ public class UserService {
     public LoginResponse login(LoginRequest req) {
 
         UserEntity user = userRepository.findById(req.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 ID"));
+                .orElseThrow(() -> new BusinessException(UserErrorCode.USER_NOT_FOUND));
 
         if (!passwordEncoder.matches(req.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호 불일치");
+            throw new BusinessException(UserErrorCode.USER_NOT_FOUND);
         }
 
         TokenResponse tokens = jwtService.createTokens(user);
@@ -79,7 +80,7 @@ public class UserService {
     /** 유저 정보 조회 */
     public UserResponse getOne(String userId) {
         UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(UserErrorCode.INVALID_USER_ID));
 
         return UserResponse.fromEntity(user);
     }
@@ -88,7 +89,7 @@ public class UserService {
     public UserResponse update(String userId, UserUpdateRequest req) {
 
         UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(UserErrorCode.INVALID_USER_ID));
 
         String encodedPassword = null;
         if (req.getPassword() != null) {
@@ -108,7 +109,7 @@ public class UserService {
     /** 유저 삭제(비활성화) */
     public void deactivate(String userId) {
         UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(UserErrorCode.INVALID_USER_ID));
 
         user.deactivate();
 

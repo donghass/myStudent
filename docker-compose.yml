@@ -2,24 +2,20 @@ version: "3.8"
 
 services:
   backend:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: my-backend
     ports:
       - "8080:8080"
-    depends_on:
-      - redis
     environment:
-      SPRING_REDIS_HOST: redis
-      SPRING_REDIS_PORT: 6379
-      SPRING_AUTOCONFIGURE_EXCLUDE: "org.redisson.spring.starter.RedissonAutoConfiguration,org.redisson.spring.starter.RedissonReactiveAutoConfiguration"
+      SPRING_PROFILES_ACTIVE: prod
     networks:
       - app-net
 
   redis:
-    image: redis:latest
+    image: redis:7
     container_name: my-redis
-    ports:
-      - "6380:6379"
     command: ["redis-server", "--appendonly", "yes"]
     networks:
       - app-net

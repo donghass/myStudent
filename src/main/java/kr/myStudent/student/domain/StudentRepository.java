@@ -1,7 +1,5 @@
 package kr.myStudent.student.domain;
 
-
-import com.querydsl.core.Fetchable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,9 +9,9 @@ import java.util.Optional;
 public interface StudentRepository {
     StudentEntity save(StudentEntity student);
 
-    Optional<StudentEntity> findById(StudentId id);
+    Optional<StudentEntity> findByStudent(Long studentId, String userId);
 
     List<StudentEntity> findAllByUserId(String userId);
 
-    void deleteById(StudentId id);
+    void deleteByStudent(Long studentId, String userId);
 }
