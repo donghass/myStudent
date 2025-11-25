@@ -1,5 +1,6 @@
 package kr.myStudent.student.dto.response;
 
+import kr.myStudent.enums.Subject;
 import kr.myStudent.student.domain.StudentSubjectEntity;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +12,7 @@ public class StudentSubjectResponse {
     private Long studentSubjectId;
     private Long studentId;
     private String userId;
-    private String subject;
+    private Subject subject;
     private Integer price;
 
     public static StudentSubjectResponse fromEntity(StudentSubjectEntity e) {

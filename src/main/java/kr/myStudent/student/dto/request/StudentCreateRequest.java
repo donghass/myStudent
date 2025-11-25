@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class StudentCreateRequest {
-    private String studentId;
+    private Long studentId;
     private String userId;
     private String name;
     private String tel;

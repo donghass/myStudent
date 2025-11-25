@@ -25,7 +25,7 @@ public class ScheduleEntity {
     @Column(name = "subject")
     private Subject subject; // 과목 ENUM
 
-    @Column(name = "student_id", nullable = false)
+    @Column(name = "student_id", length = 20, nullable = false)
     private Long studentId; // 학생아이디
 
     @Column(name = "user_id", length = 20, nullable = false)

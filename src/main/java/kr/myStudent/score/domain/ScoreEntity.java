@@ -27,7 +27,7 @@ public class ScoreEntity {
     @Column(name = "user_id", length = 20, nullable = false)
     private String userId; // 선생아이디 (FK)
 
-    @Column(name = "student_id", nullable = false)
+    @Column(name = "student_id", length = 20, nullable = false)
     private Long studentId; // 학생아이디 (FK)
 
     @Enumerated(EnumType.STRING)

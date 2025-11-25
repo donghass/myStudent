@@ -1,6 +1,7 @@
 package kr.myStudent.student.domain;
 
 import jakarta.persistence.*;
+import kr.myStudent.enums.Subject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
