@@ -23,8 +23,7 @@ public class ScheduleController {
     /** 등록 */
     @PostMapping
     public ResponseEntity<CommonResponse<ScheduleResponse>> create(
-            @RequestBody ScheduleCreateRequest req
-    ) {
+            @RequestBody ScheduleCreateRequest req) {
         ScheduleResponse result = scheduleService.create(req);
         return ResponseEntity.ok(CommonResponse.success(ResponseCode.SUCCESS, result));
     }
@@ -39,8 +38,7 @@ public class ScheduleController {
     /** userId 기준 전체 조회 */
     @GetMapping
     public ResponseEntity<CommonResponse<List<ScheduleResponse>>> getByUserId(
-            @RequestParam String userId
-    ) {
+            @RequestParam String userId) {
         List<ScheduleResponse> result = scheduleService.getByUserId(userId);
         return ResponseEntity.ok(CommonResponse.success(ResponseCode.SUCCESS, result));
     }
@@ -49,8 +47,7 @@ public class ScheduleController {
     @GetMapping("/student")
     public ResponseEntity<CommonResponse<List<ScheduleResponse>>> getByUserIdAndStudentId(
             @RequestParam String userId,
-            @RequestParam Long studentId
-    ) {
+            @RequestParam Long studentId) {
         List<ScheduleResponse> result = scheduleService.getByUserIdAndStudentId(userId, studentId);
         return ResponseEntity.ok(CommonResponse.success(ResponseCode.SUCCESS, result));
     }
@@ -59,8 +56,7 @@ public class ScheduleController {
     @PutMapping("/{id}")
     public ResponseEntity<CommonResponse<ScheduleResponse>> update(
             @PathVariable Long id,
-            @RequestBody ScheduleUpdateRequest req
-    ) {
+            @RequestBody ScheduleUpdateRequest req) {
         ScheduleResponse result = scheduleService.update(id, req);
         return ResponseEntity.ok(CommonResponse.success(ResponseCode.SUCCESS, result));
     }
@@ -77,8 +73,7 @@ public class ScheduleController {
     public ResponseEntity<CommonResponse<List<ScheduleResponse>>> getDateRange(
             @RequestParam String userId,
             @RequestParam String start,
-            @RequestParam String end
-    ) {
+            @RequestParam String end) {
         LocalDateTime startDate = LocalDateTime.parse(start);
         LocalDateTime endDate = LocalDateTime.parse(end);
 
@@ -90,8 +85,7 @@ public class ScheduleController {
     /** 오늘의 수업 조회 */
     @GetMapping("/today")
     public ResponseEntity<CommonResponse<List<ScheduleResponse>>> getToday(
-            @RequestParam String userId
-    ) {
+            @RequestParam String userId) {
         List<ScheduleResponse> result = scheduleService.getTodaySchedules(userId);
 
         return ResponseEntity.ok(CommonResponse.success(ResponseCode.SUCCESS, result));
@@ -102,8 +96,7 @@ public class ScheduleController {
     public ResponseEntity<CommonResponse<List<ScheduleResponse>>> getMonthly(
             @RequestParam String userId,
             @RequestParam int year,
-            @RequestParam int month
-    ) {
+            @RequestParam int month) {
         List<ScheduleResponse> result = scheduleService.getMonthlySchedules(userId, year, month);
 
         return ResponseEntity.ok(CommonResponse.success(ResponseCode.SUCCESS, result));

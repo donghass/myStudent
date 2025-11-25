@@ -1,6 +1,7 @@
 package kr.myStudent.user.service;
 
 import kr.myStudent.common.exception.BusinessException;
+import kr.myStudent.common.response.ResponseCode;
 import kr.myStudent.user.domain.UserEntity;
 import kr.myStudent.user.domain.UserRepository;
 import kr.myStudent.user.dto.request.LoginRequest;
@@ -61,11 +62,11 @@ public class UserService {
 
         TokenResponse tokens = jwtService.createTokens(user);
 
-
         return LoginResponse.builder()
                 .accessToken(tokens.getAccessToken())
                 .refreshToken(tokens.getRefreshToken())
                 .userId(user.getUserId())
+                .name(user.getName())
                 .role(user.getRole())
                 .message("로그인 성공")
                 .build();
@@ -98,8 +99,7 @@ public class UserService {
         user.updateInfo(
                 req.getName(),
                 req.getTel(),
-                encodedPassword
-        );
+                encodedPassword);
 
         userRepository.save(user);
 

@@ -10,6 +10,7 @@ public class UserMapper {
                 .userId(request.getUserId())
                 .password(encodedPassword)
                 .name(request.getName())
+                .email(request.getEmail())
                 .tel(request.getTel())
                 .build();
     }
