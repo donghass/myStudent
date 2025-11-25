@@ -57,7 +57,7 @@ public class ScoreController {
     @GetMapping("/student")
     public ResponseEntity<CommonResponse<List<ScoreResponse>>> getByUserIdAndStudentId(
             @RequestParam String userId,
-            @RequestParam String studentId
+            @RequestParam Long studentId
     ) {
         List<ScoreResponse> result = scoreService.getByUserIdAndStudentId(userId, studentId);
 

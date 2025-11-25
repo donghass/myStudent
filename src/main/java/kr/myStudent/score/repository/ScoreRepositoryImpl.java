@@ -45,7 +45,7 @@ public class ScoreRepositoryImpl implements ScoreRepository {
 
     /** Querydsl: userId + studentId 기준 조회 */
     @Override
-    public List<ScoreEntity> findByUserIdAndStudentId(String userId, String studentId) {
+    public List<ScoreEntity> findByUserIdAndStudentId(String userId, Long studentId) {
         return queryFactory
                 .selectFrom(score)
                 .where(

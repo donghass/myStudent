@@ -8,5 +8,5 @@ public interface ScoreRepository {
     Optional<ScoreEntity> findById(Long id);
     void deleteById(Long id);
     List<ScoreEntity> findByUserId(String userId);
-    List<ScoreEntity> findByUserIdAndStudentId(String userId, String studentId);
+    List<ScoreEntity> findByUserIdAndStudentId(String userId, Long studentId);
 }

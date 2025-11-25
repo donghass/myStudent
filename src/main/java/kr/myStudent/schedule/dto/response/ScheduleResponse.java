@@ -1,5 +1,6 @@
 package kr.myStudent.schedule.dto.response;
 
+import kr.myStudent.enums.Subject;
 import kr.myStudent.schedule.domain.ScheduleEntity;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +10,8 @@ import lombok.Data;
 public class ScheduleResponse {
 
     private Long scheduleId;
-    private String subject;
-    private String studentId;
+    private Subject subject;
+    private Long studentId;
     private String userId;
     private String classDate;
     private String classLocation;
@@ -19,7 +20,7 @@ public class ScheduleResponse {
     public static ScheduleResponse fromEntity(ScheduleEntity e) {
         return ScheduleResponse.builder()
                 .scheduleId(e.getScheduleId())
-                .subject(e.getSubject().name())
+                .subject(e.getSubject())
                 .studentId(e.getStudentId())
                 .userId(e.getUserId())
                 .classDate(e.getClassDate() != null ? e.getClassDate().toString() : null)

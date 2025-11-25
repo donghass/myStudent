@@ -48,7 +48,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
     /** Querydsl로 userId + studentId 조회 */
     @Override
-    public List<ScheduleEntity> findByUserIdAndStudentId(String userId, String studentId) {
+    public List<ScheduleEntity> findByUserIdAndStudentId(String userId, Long studentId) {
         return queryFactory
                 .selectFrom(schedule)
                 .where(

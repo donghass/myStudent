@@ -10,7 +10,7 @@ public interface ScheduleRepository {
     void deleteById(Long id);
 
     List<ScheduleEntity> findByUserId(String userId);
-    List<ScheduleEntity> findByUserIdAndStudentId(String userId, String studentId);
+    List<ScheduleEntity> findByUserIdAndStudentId(String userId, Long studentId);
     List<ScheduleEntity> findByUserIdAndDateRange(String userId, LocalDateTime start, LocalDateTime end);
 
     List<ScheduleEntity> findTodaySchedules(String userId);

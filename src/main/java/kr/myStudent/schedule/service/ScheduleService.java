@@ -53,7 +53,7 @@ public class ScheduleService {
     }
 
     /** userId + studentId 조회 */
-    public List<ScheduleResponse> getByUserIdAndStudentId(String userId, String studentId) {
+    public List<ScheduleResponse> getByUserIdAndStudentId(String userId, Long studentId) {
 
         return scheduleRepository.findByUserIdAndStudentId(userId, studentId).stream()
                 .map(ScheduleResponse::fromEntity)

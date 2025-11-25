@@ -49,7 +49,7 @@ public class ScheduleController {
     @GetMapping("/student")
     public ResponseEntity<CommonResponse<List<ScheduleResponse>>> getByUserIdAndStudentId(
             @RequestParam String userId,
-            @RequestParam String studentId
+            @RequestParam Long studentId
     ) {
         List<ScheduleResponse> result = scheduleService.getByUserIdAndStudentId(userId, studentId);
         return ResponseEntity.ok(CommonResponse.success(ResponseCode.SUCCESS, result));

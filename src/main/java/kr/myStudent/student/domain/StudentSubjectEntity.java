@@ -1,6 +1,7 @@
 package kr.myStudent.student.domain;
 
 import jakarta.persistence.*;
+import kr.myStudent.enums.Subject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +28,7 @@ public class StudentSubjectEntity {
     private String userId;      // 선생 아이디 (FK 역할)
 
     @Column(name = "subject", nullable = false)
-    private String subject;
+    private Subject subject;
 
     @Column(name = "price", nullable = false)
     private Integer price;
@@ -38,7 +39,7 @@ public class StudentSubjectEntity {
     @Builder.Default
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    public void update(String subject, Integer price) {
+    public void update(Subject subject, Integer price) {
         this.subject = subject;
         this.price = price;
     }
