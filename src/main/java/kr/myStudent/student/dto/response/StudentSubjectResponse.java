@@ -20,7 +20,7 @@ public class StudentSubjectResponse {
                 .studentSubjectId(e.getStudentSubjectId())
                 .studentId(e.getStudentId())
                 .userId(e.getUserId())
-                .subject(e.getSubject().name())
+                .subject(e.getSubject())
                 .price(e.getPrice())
                 .build();
     }
