@@ -60,7 +60,7 @@ dependencies {
     developmentOnly "org.springframework.boot:spring-boot-devtools"
 
     // 메일
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    // implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 }
 
