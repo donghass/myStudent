@@ -13,5 +13,6 @@ public class SignUpRequest {
     private String userId;
     private String password;
     private String name;
+    private String email;
     private String tel;
 }

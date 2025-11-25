@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import kr.myStudent.enums.Subject;
 
 @Entity
 @Table(name = "ms_student_subject")
@@ -25,8 +26,9 @@ public class StudentSubjectEntity {
     private Long studentId; // FK(학생)
 
     @Column(name = "user_id", nullable = false)
-    private String userId;      // 선생 아이디 (FK 역할)
+    private String userId; // 선생 아이디 (FK 역할)
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "subject", nullable = false)
     private Subject subject;
 
