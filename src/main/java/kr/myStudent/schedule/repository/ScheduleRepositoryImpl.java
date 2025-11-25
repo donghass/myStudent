@@ -48,13 +48,12 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
     /** Querydsl로 userId + studentId 조회 */
     @Override
-    public List<ScheduleEntity> findByUserIdAndStudentId(String userId, String studentId) {
+    public List<ScheduleEntity> findByUserIdAndStudentId(String userId, Long studentId) {
         return queryFactory
                 .selectFrom(schedule)
                 .where(
                         schedule.userId.eq(userId),
-                        schedule.studentId.eq(studentId)
-                )
+                        schedule.studentId.eq(studentId))
                 .orderBy(schedule.classDate.desc())
                 .fetch();
     }
@@ -65,8 +64,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
                 .selectFrom(schedule)
                 .where(
                         schedule.userId.eq(userId),
-                        schedule.classDate.between(start, end)
-                )
+                        schedule.classDate.between(start, end))
                 .orderBy(schedule.classDate.asc())
                 .fetch();
     }
@@ -83,8 +81,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
                 .selectFrom(schedule)
                 .where(
                         schedule.userId.eq(userId),
-                        schedule.classDate.between(start, end)
-                )
+                        schedule.classDate.between(start, end))
                 .orderBy(schedule.classDate.asc())
                 .fetch();
     }
@@ -102,8 +99,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
                 .selectFrom(schedule)
                 .where(
                         schedule.userId.eq(userId),
-                        schedule.classDate.between(start, end)
-                )
+                        schedule.classDate.between(start, end))
                 .orderBy(schedule.classDate.asc())
                 .fetch();
     }

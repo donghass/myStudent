@@ -39,20 +39,19 @@ public class ScoreRepositoryImpl implements ScoreRepository {
         return queryFactory
                 .selectFrom(score)
                 .where(score.userId.eq(userId))
-                .orderBy(score.testDate.desc())   // optional: 시험 최신순 정렬
+                .orderBy(score.testDate.desc()) // optional: 시험 최신순 정렬
                 .fetch();
     }
 
     /** Querydsl: userId + studentId 기준 조회 */
     @Override
-    public List<ScoreEntity> findByUserIdAndStudentId(String userId, String studentId) {
+    public List<ScoreEntity> findByUserIdAndStudentId(String userId, Long studentId) {
         return queryFactory
                 .selectFrom(score)
                 .where(
                         score.userId.eq(userId),
-                        score.studentId.eq(studentId)
-                )
-                .orderBy(score.testDate.desc())   // optional
+                        score.studentId.eq(studentId))
+                .orderBy(score.testDate.desc()) // optional
                 .fetch();
     }
 }

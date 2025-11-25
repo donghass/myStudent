@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 public class ScheduleCreateRequest {
     private Subject subject;
-    private String studentId;
+    private Long studentId;
     private String userId;
     private LocalDateTime classDate;
     private String classLocation;

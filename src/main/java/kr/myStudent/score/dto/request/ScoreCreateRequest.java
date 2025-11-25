@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Data
 public class ScoreCreateRequest {
     private String userId;
-    private String studentId;
+    private Long studentId;
     private Subject subject;
     private Double score;
     private String testName;

@@ -10,7 +10,7 @@ public class ScoreResponse {
 
     private Long scoreId;
     private String userId;
-    private String studentId;
+    private Long studentId;
     private String subject;
     private Double score;
     private String testName;

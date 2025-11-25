@@ -1,5 +1,7 @@
 package kr.myStudent.student.dto.request;
 
+import kr.myStudent.enums.Subject;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +10,6 @@ import lombok.Setter;
 public class StudentSubjectCreateRequest {
     private Long studentId;
     private String userId;
-    private String subject;
+    private Subject subject;
     private Integer price;
 }

@@ -49,7 +49,7 @@ public class ScoreService {
     }
 
     /** userId + studentId 기준 전체 조회 */
-    public List<ScoreResponse> getByUserIdAndStudentId(String userId, String studentId) {
+    public List<ScoreResponse> getByUserIdAndStudentId(String userId, Long studentId) {
         return scoreRepository.findByUserIdAndStudentId(userId, studentId).stream()
                 .map(ScoreResponse::fromEntity)
                 .collect(Collectors.toList());

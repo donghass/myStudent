@@ -10,7 +10,7 @@ public class ScheduleResponse {
 
     private Long scheduleId;
     private String subject;
-    private String studentId;
+    private Long studentId;
     private String userId;
     private String classDate;
     private String classLocation;
