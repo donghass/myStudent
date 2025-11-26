@@ -13,7 +13,7 @@ public class JwtUtil {
     private static final String SECRET_KEY = "ThisIsAReallyLongSecretKeyThatIsAtLeast32Bytes!!";
     private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
-    private final long ACCESS_TOKEN_TIME = 1000 * 60 * 30;  // 30분
+    private final long ACCESS_TOKEN_TIME = 1000 * 60 * 30; // 30분
     private final long REFRESH_TOKEN_TIME = 1000 * 60 * 60 * 24 * 14; // 2주
 
     // 토큰 생성
@@ -39,6 +39,7 @@ public class JwtUtil {
     public String extractId(String token) {
         return parseClaims(token).getSubject();
     }
+
     public String extractRole(String token) {
         return parseClaims(token).get("role", String.class);
     }
@@ -51,13 +52,18 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
     public long getExpiration(String token) {
         Date exp = parseClaims(token).getExpiration();
         return exp.getTime() - System.currentTimeMillis();
     }
 
+    // 토큰 검증 및 Claims 반환 (예외 발생 시 던짐)
+    public Claims validateAndExtractClaims(String token) {
+        return parseClaims(token);
+    }
 
-    // 토큰 유효성 검사
+    // 토큰 유효성 검사 (boolean 반환)
     public boolean validateToken(String token) {
         try {
             parseClaims(token);
