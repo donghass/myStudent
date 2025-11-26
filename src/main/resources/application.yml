@@ -5,7 +5,7 @@ spring:
       - org.redisson.spring.starter.RedissonReactiveAutoConfiguration
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://gateway01.ap-northeast-1.prod.aws.tidbcloud.com:4000/test?sslMode=VERIFY_IDENTITY&enabledTLSProtocols=TLSv1.2
+    url: jdbc:mysql://gateway01.ap-northeast-1.prod.aws.tidbcloud.com:4000/test?sslMode=VERIFY_IDENTITY&enabledTLSProtocols=TLSv1.2&serverTimezone=Asia/Seoul
     username: 4KPw8TdWa9Uknwp.root
     password: h9cKiMZ8PLerDuWD
 
@@ -22,8 +22,14 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+        jdbc:
+          time_zone: Asia/Seoul
     show-sql: true
     open-in-view: false
+  jackson:
+    time-zone: Asia/Seoul
+    serialization:
+      write-dates-as-timestamps: false
   data:
     redis:
       host: redis
