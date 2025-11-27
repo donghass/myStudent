@@ -34,6 +34,7 @@ spring:
     redis:
       host: redis
       port: 6379
+      token: AaPnAAIncDJkMjkxYjY0ZmY4ZDM0MjE5YWU5YjRkOTFhYjBkN2ViM3AyNDE5NTk
 logging:
   level:
     org.hibernate.SQL: debug
