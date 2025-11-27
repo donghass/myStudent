@@ -5,25 +5,18 @@ import lombok.Getter;
 
 @Getter
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum AttendanceStatus {
-    ATTENDED("출석"),
-    ABSENT("결석"),
-    LATE("지각"),
-    EARLY_LEAVE("조퇴");
+public enum Understanding {
+    HIGH("상"),
+    MEDIUM("중"),
+    LOW("하");
 
     private final String label;
 
-    AttendanceStatus(String label) {
+    Understanding(String label) {
         this.label = label;
     }
 
     public String getName() {
         return this.name();
-    }
-
-    // 하위 호환성을 위한 메서드
-    @Deprecated
-    public String getDescription() {
-        return label;
     }
 }
