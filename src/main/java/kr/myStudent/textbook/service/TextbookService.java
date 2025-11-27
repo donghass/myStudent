@@ -1,7 +1,7 @@
 package kr.myStudent.textbook.service;
 
 import kr.myStudent.textbook.domain.TextbookEntity;
-import kr.myStudent.textbook.domain.TextbookStatus;
+import kr.myStudent.enums.TextbookStatus;
 import kr.myStudent.textbook.dto.request.TextbookCreateRequest;
 import kr.myStudent.textbook.dto.response.TextbookResponse;
 import kr.myStudent.textbook.repository.TextbookRepository;

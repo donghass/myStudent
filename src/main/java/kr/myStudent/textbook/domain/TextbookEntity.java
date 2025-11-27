@@ -2,6 +2,7 @@ package kr.myStudent.textbook.domain;
 
 import jakarta.persistence.*;
 import kr.myStudent.enums.Subject;
+import kr.myStudent.enums.TextbookStatus;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

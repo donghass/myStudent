@@ -2,7 +2,7 @@ package kr.myStudent.textbook.dto.response;
 
 import kr.myStudent.enums.Subject;
 import kr.myStudent.textbook.domain.TextbookEntity;
-import kr.myStudent.textbook.domain.TextbookStatus;
+import kr.myStudent.enums.TextbookStatus;
 import lombok.Builder;
 import lombok.Getter;
 
