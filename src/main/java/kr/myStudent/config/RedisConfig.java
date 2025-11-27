@@ -15,9 +15,9 @@ public class RedisConfig {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory(
-            @Value("${spring.data.redis.host}") String host,
-            @Value("${spring.data.redis.port}") int port,
-            @Value("${spring.data.redis.token}") String token,
+            @Value("${spring.data.redis.host:redis}") String host,
+            @Value("${spring.data.redis.port:6379}") int port,
+            @Value("${spring.data.redis.token:}") String token,
             @Value("${spring.data.redis.ssl:false}") boolean ssl) {
         RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(host, port);
         if (token != null && !token.isEmpty()) {
