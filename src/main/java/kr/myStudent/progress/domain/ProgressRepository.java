@@ -14,4 +14,8 @@ public interface ProgressRepository {
     List<ProgressEntity> findLatestProgressByUserId(String userId);
 
     List<ProgressEntity> findByStudent(String userId, Long studentId);
+
+    List<ProgressEntity> findByTextbookId(Long textbookId);
+
+    Integer countByTextbookId(Long textbookId);
 }

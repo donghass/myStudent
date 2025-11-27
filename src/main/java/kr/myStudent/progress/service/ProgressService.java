@@ -1,55 +1,62 @@
 package kr.myStudent.progress.service;
 
-import kr.myStudent.progress.domain.*;
+import kr.myStudent.progress.domain.ProgressEntity;
+import kr.myStudent.progress.domain.ProgressRepository;
 import kr.myStudent.progress.dto.request.ProgressCreateRequest;
-import kr.myStudent.progress.dto.request.ProgressUpdateRequest;
+import kr.myStudent.progress.dto.response.ProgressResponse;
+import kr.myStudent.textbook.domain.TextbookEntity;
+import kr.myStudent.textbook.repository.TextbookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ProgressService {
 
-    private final ProgressRepository repository;
+    private final ProgressRepository progressRepository;
+    private final TextbookRepository textbookRepository;
 
-    public ProgressEntity create(ProgressCreateRequest req) {
+    @Transactional
+    public ProgressResponse create(ProgressCreateRequest request) {
+        // 1. Calculate lesson count
+        Integer currentCount = progressRepository.countByTextbookId(request.getTextbookId());
+        Integer nextLessonCount = currentCount + 1;
 
-        ProgressEntity entity = ProgressEntity.builder()
-                .studentId(req.getStudentId())
-                .userId(req.getUserId())
-                .subject(req.getSubject())
-                .lessonDate(LocalDateTime.parse(req.getLessonDate()))
-                .content(req.getContent())
-                .homework(req.getHomework())
-                .memo(req.getMemo())
+        // 2. Create Progress
+        ProgressEntity progress = ProgressEntity.builder()
+                .textbookId(request.getTextbookId())
+                .studentId(request.getStudentId())
+                .userId(request.getUserId())
+                .lessonCount(nextLessonCount)
+                .lessonDate(LocalDateTime.parse(request.getLessonDate(), DateTimeFormatter.ISO_DATE_TIME))
+                .unit(request.getUnit())
+                .pageStart(request.getPageStart())
+                .pageEnd(request.getPageEnd())
+                .understanding(request.getUnderstanding())
+                .memo(request.getMemo())
                 .build();
 
-        return repository.save(entity);
+        progressRepository.save(progress);
+
+        // 3. Update Textbook current unit
+        TextbookEntity textbook = textbookRepository.findById(request.getTextbookId())
+                .orElseThrow(() -> new IllegalArgumentException("Textbook not found"));
+
+        textbook.updateCurrentUnit(textbook.getCurrentUnit() + 1);
+
+        return ProgressResponse.fromEntity(progress);
     }
 
-    public ProgressEntity update(Long id, ProgressUpdateRequest req) {
-        ProgressEntity entity = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("progress not found"));
-
-        entity.updateProgress(
-                req.getSubject(),
-                LocalDateTime.parse(req.getLessonDate()),
-                req.getContent(),
-                req.getHomework(),
-                req.getMemo()
-        );
-
-        return repository.save(entity);
-    }
-
-    public List<ProgressEntity> getLatest(String userId) {
-        return repository.findLatestProgressByUserId(userId);
-    }
-
-    public List<ProgressEntity> getByStudent(String userId, Long studentId) {
-        return repository.findByStudent(userId, studentId);
+    public List<ProgressResponse> getByTextbook(Long textbookId) {
+        return progressRepository.findByTextbookId(textbookId).stream()
+                .map(ProgressResponse::fromEntity)
+                .collect(Collectors.toList());
     }
 }

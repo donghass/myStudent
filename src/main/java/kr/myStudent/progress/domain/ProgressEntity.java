@@ -1,8 +1,10 @@
 package kr.myStudent.progress.domain;
 
 import jakarta.persistence.*;
-import kr.myStudent.enums.Subject;
+import kr.myStudent.enums.Understanding;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -19,39 +21,46 @@ public class ProgressEntity {
     private Long progressId;
 
     @Column(nullable = false)
+    private Long textbookId;
+
+    @Column(nullable = false)
     private Long studentId;
 
     @Column(nullable = false)
     private String userId;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Subject subject;
+    private Integer lessonCount;
 
     @Column(nullable = false)
     private LocalDateTime lessonDate;
 
-    @Column(columnDefinition = "TEXT")
-    private String content;
+    @Column(nullable = false)
+    private String unit;
 
-    @Column(columnDefinition = "TEXT")
-    private String homework;
+    private Integer pageStart;
+
+    private Integer pageEnd;
+
+    @Enumerated(EnumType.STRING)
+    private Understanding understanding;
 
     @Column(columnDefinition = "TEXT")
     private String memo;
 
-    @Builder.Default
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
-    @Builder.Default
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
-    public void updateProgress(Subject subject, LocalDateTime lessonDate, String content, String homework, String memo) {
-        this.subject = subject;
+    public void updateProgress(LocalDateTime lessonDate, String unit, Integer pageStart, Integer pageEnd,
+            Understanding understanding, String memo) {
         this.lessonDate = lessonDate;
-        this.content = content;
-        this.homework = homework;
+        this.unit = unit;
+        this.pageStart = pageStart;
+        this.pageEnd = pageEnd;
+        this.understanding = understanding;
         this.memo = memo;
-        this.updatedAt = LocalDateTime.now();
     }
 }
