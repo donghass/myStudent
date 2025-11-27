@@ -17,13 +17,18 @@ public class RedisConfig {
     public RedisConnectionFactory redisConnectionFactory(
             @Value("${spring.data.redis.host}") String host,
             @Value("${spring.data.redis.port}") int port,
-            @Value("${spring.data.redis.token}") String token) {
+            @Value("${spring.data.redis.token}") String token,
+            @Value("${spring.data.redis.ssl:false}") boolean ssl) {
         RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(host, port);
-        config.setPassword(token);
+        if (token != null && !token.isEmpty()) {
+            config.setPassword(token);
+        }
 
-        LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
-                .useSsl()
-                .build();
+        LettuceClientConfiguration.LettuceClientConfigurationBuilder builder = LettuceClientConfiguration.builder();
+        if (ssl) {
+            builder.useSsl();
+        }
+        LettuceClientConfiguration clientConfig = builder.build();
 
         return new LettuceConnectionFactory(config, clientConfig);
     }
