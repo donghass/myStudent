@@ -1,5 +1,8 @@
 package kr.myStudent.progress.service;
 
+import kr.myStudent.homework.domain.HomeworkEntity;
+import kr.myStudent.homework.domain.HomeworkRepository;
+import kr.myStudent.homework.dto.response.HomeworkResponse;
 import kr.myStudent.progress.domain.ProgressEntity;
 import kr.myStudent.progress.domain.ProgressRepository;
 import kr.myStudent.progress.dto.request.ProgressCreateRequest;
@@ -22,6 +25,7 @@ public class ProgressService {
 
     private final ProgressRepository progressRepository;
     private final TextbookRepository textbookRepository;
+    private final HomeworkRepository homeworkRepository;
 
     @Transactional
     public ProgressResponse create(ProgressCreateRequest request) {
@@ -45,18 +49,46 @@ public class ProgressService {
 
         progressRepository.save(progress);
 
-        // 3. Update Textbook current unit
+        // 3. Create Homeworks if provided
+        List<HomeworkResponse> homeworkResponses = null;
+        if (request.getHomeworks() != null && !request.getHomeworks().isEmpty()) {
+            homeworkResponses = request.getHomeworks().stream()
+                    .map(homeworkItem -> {
+                        HomeworkEntity homework = HomeworkEntity.builder()
+                                .progressId(progress.getProgressId())
+                                .textbookId(request.getTextbookId())
+                                .studentId(request.getStudentId())
+                                .userId(request.getUserId())
+                                .content(homeworkItem.getContent())
+                                .dueDate(homeworkItem.getDueDate() != null && !homeworkItem.getDueDate().isEmpty()
+                                        ? LocalDateTime.parse(homeworkItem.getDueDate(), DateTimeFormatter.ISO_DATE_TIME)
+                                        : null)
+                                .isCompleted(false)
+                                .build();
+                        homeworkRepository.save(homework);
+                        return HomeworkResponse.fromEntity(homework);
+                    })
+                    .collect(Collectors.toList());
+        }
+
+        // 4. Update Textbook current unit
         TextbookEntity textbook = textbookRepository.findById(request.getTextbookId())
                 .orElseThrow(() -> new IllegalArgumentException("Textbook not found"));
 
         textbook.updateCurrentUnit(textbook.getCurrentUnit() + 1);
 
-        return ProgressResponse.fromEntity(progress);
+        return ProgressResponse.fromEntity(progress, homeworkResponses);
     }
 
     public List<ProgressResponse> getByTextbook(Long textbookId) {
         return progressRepository.findByTextbookId(textbookId).stream()
-                .map(ProgressResponse::fromEntity)
+                .map(progress -> {
+                    List<HomeworkResponse> homeworks = homeworkRepository.findByProgressId(progress.getProgressId())
+                            .stream()
+                            .map(HomeworkResponse::fromEntity)
+                            .collect(Collectors.toList());
+                    return ProgressResponse.fromEntity(progress, homeworks);
+                })
                 .collect(Collectors.toList());
     }
 }
