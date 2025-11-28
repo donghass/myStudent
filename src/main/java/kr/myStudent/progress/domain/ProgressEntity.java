@@ -29,6 +29,8 @@ public class ProgressEntity {
     @Column(nullable = false)
     private String userId;
 
+    private Long scheduleId; // 연관된 일정 ID
+
     @Column(nullable = false)
     private Integer lessonCount;
 

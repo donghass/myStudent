@@ -5,6 +5,8 @@ import kr.myStudent.homework.domain.HomeworkRepository;
 import kr.myStudent.homework.dto.request.HomeworkCreateRequest;
 import kr.myStudent.homework.dto.request.HomeworkUpdateRequest;
 import kr.myStudent.homework.dto.response.HomeworkResponse;
+import kr.myStudent.progress.domain.ProgressEntity;
+import kr.myStudent.progress.domain.ProgressRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class HomeworkService {
 
     private final HomeworkRepository homeworkRepository;
+    private final ProgressRepository progressRepository;
 
     @Transactional
     public HomeworkResponse create(HomeworkCreateRequest request) {
@@ -84,6 +87,32 @@ public class HomeworkService {
                 .collect(Collectors.toList());
     }
 
+    public List<HomeworkResponse> getRecentHomeworkByStudent(Long studentId, String userId) {
+        List<ProgressEntity> progressList = progressRepository.findByStudent(userId, studentId);
+        if (progressList.isEmpty()) {
+            return List.of();
+        }
+
+        ProgressEntity targetProgress = progressList.get(0);
+
+        // 오늘 수업(Progress)이 이미 기록되었다면, 그 전 수업의 숙제를 가져와야 함
+        java.time.LocalDate today = java.time.LocalDate.now();
+        java.time.LocalDate latestDate = targetProgress.getLessonDate().toLocalDate();
+
+        if (!latestDate.isBefore(today)) {
+            if (progressList.size() > 1) {
+                targetProgress = progressList.get(1);
+            } else {
+                // 오늘이 첫 수업인 경우 지난 숙제 없음
+                return List.of();
+            }
+        }
+
+        return homeworkRepository.findByProgressId(targetProgress.getProgressId()).stream()
+                .map(HomeworkResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public void delete(Long homeworkId, String userId) {
         HomeworkEntity homework = homeworkRepository.findByHomeworkIdAndUserId(homeworkId, userId)
@@ -91,4 +120,3 @@ public class HomeworkService {
         homeworkRepository.delete(homework);
     }
 }
-

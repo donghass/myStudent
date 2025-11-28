@@ -48,6 +48,14 @@ public class HomeworkController {
         return ResponseEntity.ok(CommonResponse.success(ResponseCode.SUCCESS, response));
     }
 
+    @GetMapping("/student/{studentId}/recent")
+    public ResponseEntity<CommonResponse<List<HomeworkResponse>>> getRecentHomeworkByStudent(
+            @PathVariable Long studentId,
+            @RequestHeader("UserId") String userId) {
+        List<HomeworkResponse> response = homeworkService.getRecentHomeworkByStudent(studentId, userId);
+        return ResponseEntity.ok(CommonResponse.success(ResponseCode.SUCCESS, response));
+    }
+
     @GetMapping("/textbook/{textbookId}")
     public ResponseEntity<CommonResponse<List<HomeworkResponse>>> getByTextbookId(@PathVariable Long textbookId) {
         List<HomeworkResponse> response = homeworkService.getByTextbookId(textbookId);
@@ -62,4 +70,3 @@ public class HomeworkController {
         return ResponseEntity.ok(CommonResponse.success(ResponseCode.SUCCESS, "숙제가 삭제되었습니다."));
     }
 }
-

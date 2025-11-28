@@ -16,6 +16,7 @@ public class ProgressResponse {
     private Long progressId;
     private Long textbookId;
     private Long studentId;
+    private Long scheduleId;
     private Integer lessonCount;
     private String lessonDate;
     private String unit;
@@ -30,6 +31,7 @@ public class ProgressResponse {
                 .progressId(entity.getProgressId())
                 .textbookId(entity.getTextbookId())
                 .studentId(entity.getStudentId())
+                .scheduleId(entity.getScheduleId())
                 .lessonCount(entity.getLessonCount())
                 .lessonDate(entity.getLessonDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
                 .unit(entity.getUnit())
@@ -45,6 +47,7 @@ public class ProgressResponse {
                 .progressId(entity.getProgressId())
                 .textbookId(entity.getTextbookId())
                 .studentId(entity.getStudentId())
+                .scheduleId(entity.getScheduleId())
                 .lessonCount(entity.getLessonCount())
                 .lessonDate(entity.getLessonDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
                 .unit(entity.getUnit())
